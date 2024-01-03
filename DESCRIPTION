@@ -1,12 +1,9 @@
-Package: wlasso
-Title: Weighted LASSO Regression Models with Complex Survey Data
+Package: wglmnet
+Title: Weighted glmnet Regression Models with Complex Survey Data
 Version: 0.0.0.9000
 Authors@R: 
-    c(person("Amaia", "Iparragirre", , "amaia.iparragirre@ehu.eus", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-0660-6535")),
-      person("Thomas", "Lumley", role = c("aut")),
-      person("Irantzu", "Barrio", role = c("aut")),
-      person("Inmaculada", "Arostegui", role = c("aut")))
+    c(person("Maxwell", "Salvatore", , "mmsalva@umich.edu", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-3659-1514")))
 Description: Fit weighted LASSO regression models with complex survey data considering the sampling design when defining training and test sets using replicate weights.
 License: GPL (>= 3)
 Encoding: UTF-8
