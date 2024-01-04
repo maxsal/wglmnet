@@ -75,7 +75,7 @@ wglmnet <- function(data = NULL, col.y = NULL, col.x = NULL, alpha = 1,
                    print.rw = FALSE){
 
   if (length(alpha) == 1) {
-    wlasso(
+    wglmnet::wlasso(
       data = data,
       col.y = col.y,
       col.x = col.x,
@@ -96,7 +96,7 @@ wglmnet <- function(data = NULL, col.y = NULL, col.x = NULL, alpha = 1,
   } else {
     out <- list()
     for (a in seq_along(alpha)) {
-      tmp <- wlasso(
+      tmp <- wglmnet::wlasso(
         data = data,
         col.y = col.y,
         col.x = col.x,
@@ -121,7 +121,7 @@ wglmnet <- function(data = NULL, col.y = NULL, col.x = NULL, alpha = 1,
       )
     }
     out <- do.call(rbind, out)
-    selected <- wlasso(
+    selected <- wglmnet::wlasso(
       data = data,
       col.y = col.y,
       col.x = col.x,
@@ -143,5 +143,4 @@ wglmnet <- function(data = NULL, col.y = NULL, col.x = NULL, alpha = 1,
     selected$alpha$min  <- out[which.min(out$error), "alpha"]
     return(selected)
   }
-
 }
