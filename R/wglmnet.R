@@ -66,16 +66,16 @@
 
 wglmnet <- function(data = NULL, col.y = NULL, col.x = NULL, alpha = 1,
                    cluster = NULL, strata = NULL, weights = NULL, design = NULL,
-                   family = c("gaussian", "binomial"),
+                   family = "binomial",
                    lambda.grid = NULL,
-                   method = c("dCV", "JKn", "bootstrap", "subbootstrap", "BRR", "split", "extrapolation"),
+                   method = "dCV",
                    k = 10, R = 1, B = 200,
                    dCV.sw.test = FALSE,
                    train.prob = 0.7, method.split = c("dCV", "bootstrap", "subbootstrap"),
                    print.rw = FALSE){
 
   if (length(alpha) == 1) {
-    wglmnet::wlasso(
+    out <- wglmnet::wlasso(
       data = data,
       col.y = col.y,
       col.x = col.x,
@@ -93,6 +93,9 @@ wglmnet <- function(data = NULL, col.y = NULL, col.x = NULL, alpha = 1,
       method.split = method.split,
       print.rw = print.rw
     )
+    out$alpha$grid <- alpha
+    out$alpha$min  <- alpha
+    return(out)
   } else {
     out <- list()
     for (a in seq_along(alpha)) {
