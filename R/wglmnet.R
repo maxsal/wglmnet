@@ -93,8 +93,9 @@ wglmnet <- function(data = NULL, col.y = NULL, col.x = NULL, alpha = 1,
       method.split = method.split,
       print.rw = print.rw
     )
-    out$alpha$grid <- alpha
-    out$alpha$min  <- alpha
+    out[["alpha"]] <- list()
+    out[["alpha"]][["grid"]] <- alpha
+    out[["alpha"]][["min"]]  <- alpha
     return(out)
   } else {
     out <- list()
