@@ -59,7 +59,7 @@ wranger <- function(
     design = NULL,
     family = "binomial",
     mtry_grid             = NULL,
-    min.node.size_grid    = c(1, 3, 5, 10),
+    min.node.size_grid    = NULL,
     num_trees             = 500,
     splitrule = NULL,
     importance   = "permutation",
@@ -140,6 +140,9 @@ wranger <- function(
   # Step 2: initialize parameter grid and create formula
   if (is.null(mtry_grid)) {
     mtry_grid <- .mtry_grid_calc(ncol(data |> dplyr::select(tidyselect::any_of(col.x))))
+  }
+  if (is.null(min.node.size_grid)) {
+    min.node.size_grid <- round(seq(3, round(nrow(data) / 100), length.out = 5))
   }
   param_grid <- expand.grid(
     mtry          = mtry_grid,
