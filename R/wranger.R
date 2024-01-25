@@ -24,6 +24,7 @@
 #' @param train.prob A numeric value between 0 and 1, indicating the proportion of clusters (for the method \code{split}) or strata (for the method \code{extrapolation}) to be set in the training sets. Default is \code{train.prob = 0.7}. Only applies for \code{split} and \code{extrapolation} methods.
 #' @param method.split A character string indicating the way in which replicate weights should be defined in the \code{split} method. Choose one of the following: \code{dCV}, \code{bootstrap} or \code{subbootstrap}. Only applies for \code{split} method.
 #' @param print.rw A logical value. If \code{TRUE}, the data set with the replicate weights is saved in the output object. Default \code{print.rw=FALSE}.
+#' @param verbose A logical value indicating whether to print messages about the progress of the function.
 #'
 #' @importFrom graphics abline mtext
 #' @importFrom stats as.formula coef predict runif
@@ -71,7 +72,8 @@ wranger <- function(
     dCV.sw.test = FALSE,
     train.prob = 0.7,
     method.split = c("dCV", "bootstrap", "subbootstrap"),
-    print.rw = FALSE
+    print.rw = FALSE,
+    verbose = TRUE
 ) {
 
   # Stops and messages:
@@ -115,7 +117,10 @@ wranger <- function(
     if(B < 1){stop("The argument 'B' must be a positive integer. B=",B," is not a positive integer.\nPlease, set a valid value for 'B' or skip the argument to select the default option B=200.")}
   }
 
-
+  if (verbose) {
+    cli::cli_progress_step("Fitting weighted random forest")
+    on.exit(cli::cli_progress_done())
+  }
 
   # Step 0: Notation
   if(!is.null(design)){

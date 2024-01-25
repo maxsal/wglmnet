@@ -29,7 +29,7 @@
 #' @importFrom tidyselect any_of
 #'
 #' @return a list. either bestTune parameters (default) or output from caret::train()
-#' @export
+
 tune_ranger <- function(
     data,
     exposures,
