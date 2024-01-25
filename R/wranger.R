@@ -144,10 +144,12 @@ wranger <- function(
 
   # Step 2: initialize parameter grid and create formula
   if (is.null(mtry_grid)) {
-    mtry_grid <- .mtry_grid_calc(ncol(data |> dplyr::select(tidyselect::any_of(col.x))))
+    p <- ncol(data) - 1
+    mtry_seq <- floor(sqrt(p) * c(0.25, 0.5, 1, 2, 4))
   }
   if (is.null(min.node.size_grid)) {
-    min.node.size_grid <- round(seq(3, round(nrow(data) / 100), length.out = 5))
+    min.node.size_grid <- c(1, 3, 5, 10, 20)
+    min.node.size_grid <- min.node.size_grid[min.node.size_grid < nrow(data)]
   }
   param_grid <- expand.grid(
     mtry          = mtry_grid,
@@ -216,8 +218,6 @@ wranger <- function(
     value     = param_min[1, ]
   )
   result$param_grid <- param_grid
-  result$param <- list(grid = param_grid,
-                        min = param_min)
   result$error <- list(average = mean.error,
                        all = error)
   result$model <- ranger_min
