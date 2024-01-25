@@ -152,7 +152,7 @@ wranger <- function(
     min.node.size_grid <- min.node.size_grid[min.node.size_grid < nrow(data)]
   }
   param_grid <- expand.grid(
-    mtry          = mtry_grid,
+    mtry          = mtry_seq,
     min.node.size = min.node.size_grid
   )
   f <- as.formula(paste0(col.y, " ~ ."))
@@ -172,7 +172,7 @@ wranger <- function(
           num.tree      = num_trees,
           mtry          = param_grid[i, "mtry"],
           min.node.size = param_grid[i, "min.node.size"],
-          case.weights  = newdata[,col.w],
+          case.weights  = newdata[[col.w]],
           splitrule = splitrule
         )
 
@@ -206,7 +206,7 @@ wranger <- function(
     num.tree      = num_trees,
     mtry          = param_min[1, "mtry"],
     min.node.size = param_min[1, "min.node.size"],
-    case.weights  = newdata[,weights],
+    case.weights  = newdata[[weights]],
     importance    = importance,
     write.forest  = write.forest,
     splitrule = splitrule
@@ -214,8 +214,8 @@ wranger <- function(
 
   result <- list()
   result$param <- data.table::data.table(
-    parameter = names(param_min),
-    value     = param_min[1, ]
+    parameter = paste0("wrf_", names(param_min)),
+    value     = as.numeric(param_min)
   )
   result$param_grid <- param_grid
   result$error <- list(average = mean.error,
