@@ -211,6 +211,11 @@ wranger <- function(
   )
 
   result <- list()
+  result$param <- data.table::data.table(
+    parameter = names(param_min),
+    value     = param_min[1, ]
+  )
+  result$param_grid <- param_grid
   result$param <- list(grid = param_grid,
                         min = param_min)
   result$error <- list(average = mean.error,
