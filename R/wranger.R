@@ -13,6 +13,7 @@
 #' @param mtry_grid A vector of values to try for mtry paramter. Default is c(floor(p/3), floor(sqrt(p)), floor(sqrt(p)*2), floor(sqrt(p)*0.5)) where p is the number of exposures (i.e., length(col.x)).
 #' @param min.node.size_grid A vector of values to try for min.node.size. Default is c(1, 3, 5, 10).
 #' @param num_trees Number of trees to grow in forest
+#' @param case_level A character string indicating the level of the response variable to be considered as the positive case. Default is "1".
 #' @param splitrule Splitrule for forest. Default is default in ranger based on data.
 #' @param importance method for selecting variable importance. default is "permutation"
 #' @param write.forest whether to write the forest model in output. default is TRUE
@@ -62,6 +63,7 @@ wranger <- function(
     mtry_grid             = NULL,
     min.node.size_grid    = NULL,
     num_trees             = 500,
+    case_level = "1",
     splitrule = NULL,
     importance   = "permutation",
     write.forest = TRUE,
@@ -158,6 +160,7 @@ wranger <- function(
   if (is.null(col.x)) col.x <- names(data)[names(data) != outcome]
   f <- formula(paste0(outcome, " ~ ", paste0(col.x, collapse = " + ")))
   vars <- c(outcome, col.x)
+  if (!is.factor(newdata[[outcome]])) newdata[[outcome]] <- as.factor(newdata[[outcome]])
 
   # Step 3: Fit the training models and estimate yhat for units in the sample
   rwtraincols <- grep("_train", colnames(newdata))
@@ -174,14 +177,15 @@ wranger <- function(
           mtry          = param_grid[i, "mtry"],
           min.node.size = param_grid[i, "min.node.size"],
           case.weights  = newdata[[col.w]],
-          splitrule = splitrule
+          splitrule     = splitrule,
+          probability   = TRUE
         )
 
         if (nrow(pred_matrix) == 1) {
           pred_matrix <- matrix(ncol = 1, nrow = length(predict(model, newdata)$predictions))
-          pred_matrix[, 1] <- predict(model, newdata)$predictions
+          pred_matrix[, 1] <- predict(model, newdata, type = "response")$predictions[, case_level]
         } else {
-          pred_matrix <- cbind(pred_matrix, predict(model, newdata)$predictions)
+          pred_matrix <- cbind(pred_matrix, predict(model, newdata, type = "response")$predictions[, case_level])
         }
     }
     # Sample yhat
@@ -210,7 +214,8 @@ wranger <- function(
     case.weights  = newdata[[weights]],
     importance    = importance,
     write.forest  = write.forest,
-    splitrule = splitrule
+    splitrule     = splitrule,
+    probability   = TRUE
   )
 
   result <- list()
