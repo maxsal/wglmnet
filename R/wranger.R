@@ -145,14 +145,14 @@ wranger <- function(
   # Step 2: initialize parameter grid and create formula
   if (is.null(mtry_grid)) {
     p <- ncol(data) - 1
-    mtry_seq <- floor(sqrt(p) * c(0.25, 0.5, 1, 2, 4))
+    mtry_grid <- floor(sqrt(p) * c(0.25, 0.5, 1, 2, 4))
   }
   if (is.null(min.node.size_grid)) {
     min.node.size_grid <- c(1, 3, 5, 10, 20)
     min.node.size_grid <- min.node.size_grid[min.node.size_grid < nrow(data)]
   }
   param_grid <- expand.grid(
-    mtry          = mtry_seq,
+    mtry          = mtry_grid,
     min.node.size = min.node.size_grid
   )
   if (is.null(col.x)) col.x <- names(data)[names(data) != outcome]
