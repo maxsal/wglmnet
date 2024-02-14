@@ -63,12 +63,12 @@ error.f <- function(data, l.yhat, method, cv.error.ind = c(TRUE, FALSE),
       }
 
       # Calculate the loss and the weighted loss
-      l.loss[[yhat.name]] <- apply(l.yhat[[yhat.name]], 2, loss.f, y = as.numeric(data[,col.y]), family = family)
-      l.loss.w[[yhat.name]] <- apply(l.loss[[yhat.name]], 2, function(x){x*data[, weights.name]})
+      l.loss[[yhat.name]] <- apply(l.yhat[[yhat.name]], 2, loss.f, y = as.numeric(data[[col.y]]), family = family)
+      l.loss.w[[yhat.name]] <- apply(l.loss[[yhat.name]], 2, function(x){x*data[[weights.name]]})
 
       # Calculate the error
       if(!cv.error.ind){
-        sumwi.k <- sum(data[, weights.name])
+        sumwi.k <- sum(data[[weights.name]])
         error.lambda.r[(r-1)*k + kk,] <- apply(l.loss.w[[yhat.name]],2,sum)/sumwi.k
         rownames(error.lambda.r)[(r-1)*k + kk] <- paste0(method, "_r_", r, "_k_", kk)
       }

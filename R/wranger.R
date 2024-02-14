@@ -155,8 +155,9 @@ wranger <- function(
     mtry          = mtry_seq,
     min.node.size = min.node.size_grid
   )
-  f <- as.formula(paste0(col.y, " ~ ."))
-
+  if (is.null(col.x)) col.x <- names(data)[names(data) != outcome]
+  f <- formula(paste0(outcome, " ~ ", paste0(col.x, collapse = " + ")))
+  vars <- c(outcome, col.x)
 
   # Step 3: Fit the training models and estimate yhat for units in the sample
   rwtraincols <- grep("_train", colnames(newdata))
@@ -168,7 +169,7 @@ wranger <- function(
       for (i in 1:nrow(param_grid)) {
         model <- ranger::ranger(
           formula       = f,
-          data          = newdata,
+          data          = newdata |> dplyr::select(tidyselect::all_of(vars)),
           num.tree      = num_trees,
           mtry          = param_grid[i, "mtry"],
           min.node.size = param_grid[i, "min.node.size"],
