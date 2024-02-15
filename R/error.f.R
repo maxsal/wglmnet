@@ -63,7 +63,7 @@ error.f <- function(data, l.yhat, method, cv.error.ind = c(TRUE, FALSE),
       }
 
       # Calculate the loss and the weighted loss
-      l.loss[[yhat.name]] <- apply(l.yhat[[yhat.name]], 2, loss.f, y = as.numeric(data[[col.y]]), family = family)
+      l.loss[[yhat.name]] <- apply(l.yhat[[yhat.name]], 2, loss.f, y = as.numeric(as.character(data[[col.y]])), family = family)
       l.loss.w[[yhat.name]] <- apply(l.loss[[yhat.name]], 2, function(x){x*data[[weights.name]]})
 
       # Calculate the error
