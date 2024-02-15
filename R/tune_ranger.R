@@ -36,7 +36,7 @@ tune_ranger <- function(
     outcome,
     weights,
     mtry_grid             = NULL,
-    min.node.size_grid    = c(1, 3, 5, 10),
+    min.node.size_grid    = c(1, 3, 5, 10, 20),
     num_trees             = 500,
     splitrule             = "gini",
     n_folds               = 5,

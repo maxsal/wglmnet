@@ -1,4 +1,4 @@
-#' Weighted random forest prediction models for weighted data via ranger
+#' Weighted random forest prediction models for weighted binary classification outcome data via ranger
 #'
 #'@description This function allows as to fit random forest prediction (linear or logistic) models to weighted data, considering sampling weights in the estimation process and selects the mtry and min.node.size that minimizes the error based on different replicating weights methods.
 #'
